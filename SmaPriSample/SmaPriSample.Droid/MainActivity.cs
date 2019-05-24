@@ -40,25 +40,37 @@ namespace SmaPriSample.Droid
             {
                 var parameters = new Dictionary<string, string>()
                 {
-                    //{ "__format_archive_url", "file:///sdcard/Sample.spfmtz" }, //ファイルを読み込むにはPermissionの設定が必須
+                    //外部ストレージファイルを読み込むにはPermissionの設定が必須です。
+                    //ストレージ オプション  |  Android Developers https://developer.android.com/guide/topics/data/data-storage?hl=ja
+                    //{ "__format_archive_url", "file:///sdcard/Sample.spfmtz" },
                     { "Text", editText1.Text },
                     { "Price", editText2.Text },
                     { "Barcode", editText3.Text },
                     { "(発行枚数)", editText4.Text },
                 };
 
-                using (var client = new HttpClient())
+                try
                 {
-                    //一気にURLをビルド、UTF-8エンコードして結果を取得できる。
-                    //C# 今更ですが、HttpClientを使う - Qiita https://qiita.com/rawr/items/f78a3830d894042f891b
+                    using (var client = new HttpClient())
+                    {
+                        //一気にURLをビルド、UTF-8エンコードして結果を取得できます。
+                        //C# 今更ですが、HttpClientを使う - Qiita https://qiita.com/rawr/items/f78a3830d894042f891b
 
-                    //Pieからはhttps通信しかサポートされないので、以下のURLを参考にhttpを許可する設定を追加した。
-                    //Android 9(Pie)でHTTP通信を有効にする - Qiita https://qiita.com/b_a_a_d_o/items/afa0d83bbffdb5d4f6be
+                        //Pieからはhttps通信しかサポートされないので、以下のURLを参考にhttpを許可する設定を追加しました。
+                        //Android 9(Pie)でHTTP通信を有効にする - Qiita https://qiita.com/b_a_a_d_o/items/afa0d83bbffdb5d4f6be
 
-                    var response = await client.GetAsync($"http://localhost:8080/Format/Print?{await new FormUrlEncodedContent(parameters).ReadAsStringAsync()}");
+                        var response = await client.GetAsync($"http://localhost:8080/Format/Print?{await new FormUrlEncodedContent(parameters).ReadAsStringAsync()}");
 
-                    System.Diagnostics.Debug.WriteLine(response);
+                        System.Diagnostics.Debug.WriteLine(response);
+
+
+                    }
                 }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                }
+
             };
         }
 
