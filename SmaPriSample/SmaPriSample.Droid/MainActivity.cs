@@ -50,7 +50,11 @@ namespace SmaPriSample.Droid
                 using (var client = new HttpClient())
                 {
                     //一気にURLをビルド、UTF-8エンコードして結果を取得できる。
-                    //<remarks>C# 今更ですが、HttpClientを使う - Qiita https://qiita.com/rawr/items/f78a3830d894042f891b</remarks>
+                    //C# 今更ですが、HttpClientを使う - Qiita https://qiita.com/rawr/items/f78a3830d894042f891b
+
+                    //Pieからはhttps通信しかサポートされないので、以下のURLを参考にhttpを許可する設定を追加した。
+                    //Android 9(Pie)でHTTP通信を有効にする - Qiita https://qiita.com/b_a_a_d_o/items/afa0d83bbffdb5d4f6be
+
                     var response = await client.GetAsync($"http://localhost:8080/Format/Print?{await new FormUrlEncodedContent(parameters).ReadAsStringAsync()}");
 
                     System.Diagnostics.Debug.WriteLine(response);
