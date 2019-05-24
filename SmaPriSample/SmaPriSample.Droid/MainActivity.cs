@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Xml.Linq;
 using Android.App;
 using Android.OS;
 using Android.Runtime;
@@ -32,7 +33,7 @@ namespace SmaPriSample.Droid
             var editText3 = FindViewById<TextInputEditText>(Resource.Id.textInputEditText3);
             var editText4 = FindViewById<TextInputEditText>(Resource.Id.textInputEditText4);
             var button = FindViewById<Button>(Resource.Id.button1);
-
+            var editText = FindViewById<EditText>(Resource.Id.editText);
 
 
             //buttonのラムダ式の中にサンプルのJavaコードを移植
@@ -63,7 +64,26 @@ namespace SmaPriSample.Droid
 
                         System.Diagnostics.Debug.WriteLine(response);
 
+                        response.EnsureSuccessStatusCode();
 
+                        //Content（XMLで帰ってくる）を取得します。
+                        var xmlResponse = await response.Content.ReadAsStringAsync();
+
+                        //XMLのルート要素オブジェクトを取得
+                        var xml = XDocument.Parse(xmlResponse);
+
+                        //XMLが1個だけのエレメントなので直接読み込み
+                        var printServerResult = xml.Element("response").Element("result").Value;
+                        var printServerMessage = xml.Element("response").Element("message").Value;
+
+                        if (printServerResult == "OK")
+                        {
+                            editText.Text = "印刷指示が完了しました。";
+                        }
+                        else
+                        {
+                            editText.Text = $"Message: {printServerMessage}";
+                        }
                     }
                 }
                 catch (Exception ex)
