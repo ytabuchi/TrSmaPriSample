@@ -12,7 +12,8 @@ using Android.Widget;
 
 namespace SmaPriSample.Droid
 {
-    [Activity (Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [Activity (Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true, 
+        WindowSoftInputMode = SoftInput.StateAlwaysHidden)]
     public class MainActivity : AppCompatActivity
     {
         protected override void OnCreate (Bundle savedInstanceState)
